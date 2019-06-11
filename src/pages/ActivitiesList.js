@@ -9,6 +9,7 @@ import Ons from 'onsenui';
 import NavBar from "../components/NavBar";
 import ActivitiesCalendar from "./ActivitiesCalendar";
 import Register from "./Register";
+import Loading from "../components/Loading";
 //Libraries
 import { connect } from 'react-redux';
 
@@ -16,7 +17,7 @@ import { connect } from 'react-redux';
 import blueBackground from "../img/anime.jpg";
 
 //flux
-import { userDayActivities , setActivityToedit , replicateActivity } from '../actions';
+import { userDayActivities , setActivityToedit , replicateActivity , setDateFromCalendar } from '../actions';
 
 const styles = {
   superCenter:{
@@ -43,7 +44,7 @@ class ActivitiesList extends Component {
 
       let user = this.props.login.user;
 
-    if(this.props.activity.userActivities.length == 0 )
+    if(!this.props.activity.dateFromCalendar)
     {
 
 
@@ -84,6 +85,8 @@ class ActivitiesList extends Component {
 
     let data = { userId:user.usu_id , date:this.dateFilter.value };
 
+    this.props.setDateFromCalendar(this.dateFilter.value);
+
     this.props.userDayActivities(data);
   }
 
@@ -110,15 +113,68 @@ class ActivitiesList extends Component {
         </div>
         <div className='right'>
           <span className="list-item__subtitle">
-              <Icon icon='edit' style={styles.customIcons}  onClick={()=>{this.editActivity(row)}}  />
+              <Icon icon='edit' style={styles.customIcons}  onClick={ ()=>{
+                Ons.notification.confirm({title:"Espera",message:"¿Estas seguro de editar la actividad?"}).then(res =>{
+                  if(res){
+                      this.editActivity(row);
+                  }
+                });
+              }} />
               <br/>
-              <Icon icon='refresh' style={styles.customIcons} onClick={()=>{
-                  this.props.replicateActivity(row);
-                  this.props.navigator.pushPage({component: Register , key: "REGISTER_REPLICATE", props: {replicateMode:true}  });
+              <Icon icon='refresh' style={{...styles.customIcons, "margin-top":"105%"}} onClick={()=>{
+
+                Ons.notification.confirm({title:"Espera",message:"¿Estas seguro de replicar la actividad?"}).then(res =>{
+                  if(res){
+                    this.props.replicateActivity(row);
+                    this.props.navigator.pushPage({component: Register , key: "REGISTER_REPLICATE", props: {replicateMode:true}  });
+                  }
+                });
+
               }} />
           </span>
         </div>
       </ListItem>
+    );
+  }
+
+  contentPage(isFetching, userActivities){
+    return(
+      <div style={styles.backgPage}>
+
+       { isFetching ? <ProgressBar indeterminate  /> : null }
+
+      <Card>
+        <Row>
+          <div style={styles.superCenter}>
+
+            <Button modifier="large--cta" style={{backgroundColor:"grey"}}
+             onClick={()=>this.props.navigator.pushPage({component: ActivitiesCalendar , key: "CALENDAR_PAGE" })}
+            >
+              Calendario
+           </Button>
+
+            <form>
+              <label style={{color:"black",fontWeight:"bold"}}>Fecha de la actividad</label>
+              <input type="date" id="fecha" name="fecha" ref={(input) => this.dateFilter = input}   style={{marginTop:"5%"}}/>
+              <Button modifier="large--cta" style={{backgroundColor:"#38468a"}}  onClick={this.filterByDate} >
+                Filtrar
+             </Button>
+           </form>
+
+         </div>
+        </Row>
+      </Card>
+      <Card>
+
+        { userActivities.length > 0 ?
+        <List
+          dataSource = {userActivities}
+          renderRow={(row,idx)=>this.renderRow(row,idx)}
+          calculateItemHeight={() => Ons.platform.isAndroid() ? 48 : 44}
+        />: <span> <b> No se encuentran actividades para este día. </b> </span> }
+
+      </Card>
+    </div>
     );
   }
 
@@ -129,42 +185,14 @@ class ActivitiesList extends Component {
     return (
       <Page id="ListActivities"
         renderToolbar={ () => <NavBar title={"Lista de actividades"} showMenu={this.showMenu}  />}>
-        <div style={styles.backgPage}>
 
-         { isFetching ? <ProgressBar indeterminate  /> : null }
+        { isFetching  ?
+              <div style={{height:"100%",backgroundColor:"white"}}>
+                <Loading/>
+              </div> :
+             this.contentPage(isFetching,userActivities) }
 
-          <Card>
-            <Row>
-              <div style={styles.superCenter}>
 
-                <Button modifier="large--cta" style={{backgroundColor:"grey"}}
-                 onClick={()=>this.props.navigator.pushPage({component: ActivitiesCalendar , key: "CALENDAR_PAGE" })}
-                >
-                  Calendario
-               </Button>
-
-                <form>
-                  <label style={{color:"black",fontWeight:"bold"}}>Fecha de la actividad</label>
-                  <input type="date" id="fecha" name="fecha" ref={(input) => this.dateFilter = input}   style={{marginTop:"5%"}}/>
-                  <Button modifier="large--cta" style={{backgroundColor:"#38468a"}}  onClick={this.filterByDate} >
-                    Filtrar
-                 </Button>
-               </form>
-
-             </div>
-            </Row>
-          </Card>
-          <Card>
-
-            { userActivities.length > 0 ?
-            <List
-              dataSource = {userActivities}
-              renderRow={(row,idx)=>this.renderRow(row,idx)}
-              calculateItemHeight={() => Ons.platform.isAndroid() ? 48 : 44}
-            />: <span> <b> No se encuentran actividades para este día. </b> </span> }
-
-          </Card>
-        </div>
       </Page>
     );
   }
@@ -177,4 +205,4 @@ const mapStateToProps = state => {
   };
 }
 
-export default  connect(mapStateToProps, { userDayActivities , setActivityToedit , replicateActivity })(ActivitiesList);
+export default  connect(mapStateToProps, { userDayActivities , setActivityToedit , replicateActivity , setDateFromCalendar })(ActivitiesList);

@@ -51,9 +51,9 @@ class NavBar extends Component {
       <Toolbar style={styles.customToolBar}>
         <div className='left' >
           {this.props.backButton ? <BackButton onClick={() => {
-            this.props.backButtonAction ? this.props.backButtonAction() : false; 
+            this.props.backButtonAction ? this.props.backButtonAction() : false;
             this.props.navigator.popPage();
-          }} style={styles.customToolBarIcon}><Icon rotate={180}  icon={{default: 'ion-log-in'}} /></BackButton> : null}
+          }} style={styles.customToolBarIcon}><Icon rotate={180}   /></BackButton> : null}
         </div>
         <div className='center' style={styles.toolBarTitle}>{this.props.title}</div>
         <div className='right'>

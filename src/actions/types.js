@@ -1,4 +1,6 @@
-export const BASE_URL = window.location.href.indexOf('localhost') > 0 ? 'http://localhost:8000' : 'http://portalsig.grupo-sig.com';
+//export const BASE_URL = window.location.href.indexOf('localhost') > 0 ? 'http://localhost:8000' : 'http://portalsig.grupo-sig.com';
+
+export const BASE_URL = 'http://portalsig.grupo-sig.com';
 
 //ajax
 export const FETCH = "FETCH";

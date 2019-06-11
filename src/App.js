@@ -24,6 +24,10 @@ import ActivitiesList from './pages/ActivitiesList';
 
 import '../src/css/navigationMenu.css';
 
+import { connect } from 'react-redux';
+
+import { activityCreated } from './actions';
+
 class App extends Component {
 
   constructor() {
@@ -65,13 +69,31 @@ class App extends Component {
 
   loadPage(page,pageKey) {
     this.hide();
-    console.log(this.navigator.pages);
-    const currentPage = this.navigator.pages.slice(-1)[0] // --- or [this.navigator.pages.length - 1]
-    console.log(currentPage.key);
-    console.log(pageKey);
 
-    if(currentPage.key != pageKey){
+    let forceReset = false;
+
+    //console.log(this.navigator.pages);
+    const currentPage = this.navigator.pages.slice(-1)[0] // --- or [this.navigator.pages.length - 1]
+    //console.log(currentPage.key);
+    //console.log(pageKey);
+
+    this.navigator.pages.forEach( page => {
+      console.log(page);
+
+      if(page.key == pageKey && currentPage.key != page.key)
+      {
+        forceReset = true;
+      }
+    });
+
+    if(currentPage.key != pageKey && forceReset == false ){
       this.navigator.resetPage({ component: page, key: pageKey  }, { animation: 'fade' });
+    }
+    else{
+      if(forceReset)
+      {
+        this.navigator.pushPage({ component: page, key: pageKey  }, { animation: 'fade' });
+      }
     }
   }
 
@@ -102,7 +124,7 @@ class App extends Component {
                 <ListItem  onClick={()=>{this.loadPage(Main,"MAIN_PAGE")}} tappable>
                   <Icon icon="fa-user" size={12} style={{color:"#193146"}}></Icon>  <span style={{marginLeft:"15px"}}> Perfil</span>
                 </ListItem>
-                <ListItem  onClick={()=>{this.loadPage(Register,"REGISTER_PAGE")}} tappable>
+                <ListItem  onClick={()=>{ this.props.activityCreated();  this.loadPage(Register,"REGISTER_PAGE")}} tappable>
                   <Icon icon="fa-file" size={12} style={{color:"#193146"}}></Icon>  <span style={{marginLeft:"15px"}}> Registrar Actividad</span>
                 </ListItem>
                 <ListItem onClick={()=>{this.loadPage(ActivitiesList,"LIST_PAGE")}} tappable>
@@ -133,6 +155,14 @@ class App extends Component {
 
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    activity: state.activity,
+  };
+}
+
+export default  connect(mapStateToProps, { activityCreated })(App);
+
+
 
 /*<Ons.Navigator initialRoute={{ component: Home, props: { key: Home.name } }} renderPage={this.renderPage.bind(this)} ref={(navigator) => { this.navigator = navigator; }} />*/

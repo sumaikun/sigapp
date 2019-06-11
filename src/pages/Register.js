@@ -10,6 +10,7 @@ import Ons from 'onsenui';
 
 //Components
 import NavBar from "../components/NavBar";
+import Loading from "../components/Loading";
 //import ActivitiesList from "./ActivitiesList";
 //sources
 import '../css/form.css';
@@ -21,6 +22,12 @@ import boxBackground from '../img/backgroundBox.png';
 
 //flux
 import { registerActivity , updateActivity , userDayActivities } from '../actions';
+
+const styles = {
+  backgPage:{backgroundImage:"url("+blueBackground+")", height:"100%", overflow:"auto"},
+  formBackg:{backgroundImage:"url("+boxBackground+")"},
+  selectSearch:{width:"100%",marginTop:"2%"}
+}
 
 class Register extends Component {
 
@@ -36,7 +43,9 @@ class Register extends Component {
     this.handleChangeDataSelect = this.handleChangeDataSelect.bind(this);
     this.enableForm = this.enableForm.bind(this);
     this.replicateOnlyCustomer = this.replicateOnlyCustomer.bind(this);
-    console.log(this.props);
+    //console.log(this.props);
+
+    this.contentPage = this.contentPage.bind(this);
 
   }
 
@@ -302,36 +311,18 @@ class Register extends Component {
 
   enableForm(){
 
-      this.setState({ isDisable: !this.state.isDisable },()=>{
+      /*this.setState({ isDisable: !this.state.isDisable },()=>{
+        console.log(this.state);
+      });*/
+
+      this.setState({ isDisable: false },()=>{
         console.log(this.state);
       });
   }
 
+  contentPage(){
+    return(
 
-  render() {
-
-    const styles = {
-      backgPage:{backgroundImage:"url("+blueBackground+")", height:"100%", overflow:"auto"},
-      formBackg:{backgroundImage:"url("+boxBackground+")"},
-      selectSearch:{width:"100%",marginTop:"2%"}
-    }
-
-      const { isFetching } = this.props.activity;
-
-      //const { customers, companies } = this.props.enterprises;
-
-     return (
-      <Page id="register"
-        renderToolbar={ () => !this.props.editMode  ? <NavBar title={"Registrar actividad" } showMenu={this.showMenu}  navigator={this.props.navigator}  />
-          : <NavBar title={ "Editar actividad" } showMenu={this.showMenu} backButtonAction={()=>{
-            let data = {};
-            data.userId = this.props.activity.activityToedit.usuario;
-            data.date = this.props.activity.activityToedit.fecha;
-            this.props.userDayActivities(data);
-
-          }} backButton={this.props.editMode} navigator={this.props.navigator}  />
-        }>
-         { isFetching ? <ProgressBar indeterminate  /> : null }
 
 
         <div style={styles.backgPage}>
@@ -387,11 +378,11 @@ class Register extends Component {
             </Row>
             <Row>
               <label>filial/lugar</label>
-              <input type="text" ref={(input) => this.data.filial = input}  placeholder="Filial/Lugar" name="filial" disabled={this.state.isDisable}   required />
+              <input type="text" ref={(input) => this.data.filial = input}  placeholder="Filial/Lugar" name="filial" disabled={this.state.isDisable}    />
             </Row>
             <Row>
               <label>subcontratista</label>
-              <input type="text" ref={(input) => this.data.subcontratista = input}  placeholder="subcontratista" name="subcontratista" disabled={this.state.isDisable}   required />
+              <input type="text" ref={(input) => this.data.subcontratista = input}  placeholder="subcontratista" name="subcontratista" disabled={this.state.isDisable}    />
             </Row>
             <Row>
               <label>Descripción de la actividad</label>
@@ -410,7 +401,41 @@ class Register extends Component {
 
         </div>
 
-      </Page>
+
+    );
+  }
+
+
+  render() {
+
+
+
+      const { isFetching } = this.props.activity;
+
+      //const { customers, companies } = this.props.enterprises;
+
+     return (
+
+       <Page id="register"
+         renderToolbar={ () => !this.props.editMode  ? <NavBar title={"Registrar actividad" } showMenu={this.showMenu}  navigator={this.props.navigator}  />
+           : <NavBar title={ "Editar actividad" } showMenu={this.showMenu} backButtonAction={()=>{
+             let data = {};
+             data.userId = this.props.activity.activityToedit.usuario;
+             data.date = this.props.activity.activityToedit.fecha;
+             this.props.userDayActivities(data);
+
+           }} backButton={this.props.editMode} navigator={this.props.navigator}  />
+         }>
+          { isFetching ? <ProgressBar indeterminate  /> : null }
+
+          { isFetching  ?
+                <div style={{height:"100%",backgroundColor:"white"}}>
+                  <Loading/>
+                </div> :
+               this.contentPage() }
+
+        </Page>
+
     );
   }
 }

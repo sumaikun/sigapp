@@ -38,7 +38,7 @@ const ActivityReducer = (state = initialState, action) => {
       state = {
         ...state,
         activityToedit:action.payload,
-        buttonSubmitTitle:'Editar actividad',
+        buttonSubmitTitle:'Registrar Cambios',
       }
       console.log("Here go to edit");
       return state;

@@ -62,7 +62,7 @@ class Login extends Component {
     };
 
     validation ? this.props.fetchLogin({
-      email: this.userMail.value,
+      email: this.userMail.value.toLowerCase(),
       password: this.userPassword.value
     },successCallBack) : false;
 

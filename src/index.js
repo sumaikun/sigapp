@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Main from './pages/Main';
 import Loading from './components/Loading';
 import ActivitiesCalendar from "./pages/ActivitiesCalendar";
+import ErrorBoundary from "./containers/ErrorBoundary";
 import * as serviceWorker from './serviceWorker';
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
@@ -18,7 +19,9 @@ const store = createStoreWithMiddleware(reducers);
 
 ReactDOM.render(
 <Provider store={store}>
-  <App/>
+  <ErrorBoundary>
+    <App/>
+  </ErrorBoundary>
 </Provider>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
