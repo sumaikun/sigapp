@@ -1,8 +1,12 @@
 import { FETCH, LOGOUT, LOGIN_SUCCESS, FETCH_FAIL } from "../actions/types";
 
+import { loadState } from '../helpers/appStorage';
+
+const loadedData = loadState();
+
 let initialuser = {}
 
-const initialState = {
+const initialState = loadedData ? loadedData.login  : {
   user: initialuser,
   isLogged: false,
 };

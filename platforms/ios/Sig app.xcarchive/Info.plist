@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ApplicationProperties</key>
+	<dict>
+		<key>ApplicationPath</key>
+		<string>Applications/Sig app.app</string>
+		<key>CFBundleIdentifier</key>
+		<string>com.sig.app</string>
+		<key>CFBundleShortVersionString</key>
+		<string>1.0.0</string>
+		<key>CFBundleVersion</key>
+		<string>1.0.0</string>
+		<key>SigningIdentity</key>
+		<string>iPhone Developer: Jesús Vega (U5C59F6XC3)</string>
+		<key>Team</key>
+		<string>833N2JL9SM</string>
+	</dict>
+	<key>ArchiveVersion</key>
+	<integer>2</integer>
+	<key>CreationDate</key>
+	<date>2019-07-07T02:38:12Z</date>
+	<key>Name</key>
+	<string>Sig app</string>
+	<key>SchemeName</key>
+	<string>Sig app</string>
+</dict>
+</plist>

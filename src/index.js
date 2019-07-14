@@ -7,15 +7,30 @@ import Main from './pages/Main';
 import Loading from './components/Loading';
 import ActivitiesCalendar from "./pages/ActivitiesCalendar";
 import ErrorBoundary from "./containers/ErrorBoundary";
+import Register from "./pages/Register";
 import * as serviceWorker from './serviceWorker';
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import reducers from "./reducers/";
 
+import { loadState, saveState } from './helpers/appStorage';
+
+const loadedData = loadState();
+
+console.log(loadedData);
+
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 
 const store = createStoreWithMiddleware(reducers);
+
+console.log(store);
+
+store.subscribe( function () {
+  //console.log("listener activated");
+  //console.log(store.getState());
+  saveState(store.getState())
+});
 
 ReactDOM.render(
 <Provider store={store}>

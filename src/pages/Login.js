@@ -36,9 +36,14 @@ class Login extends Component {
     this.state = {
       test:true,
     }
+    if(this.props.login.user.usu_email)
+    {
+       this.props.navigator.pushPage({component: Main , key: "MAIN_PAGE" });
+    }
   }
 
   componentDidMount() {
+    console.log(this.props);
     const backgContainer = document.getElementById('backgContainer');
     console.log(backgContainer.clientHeight);
     this.setState({ backgHeight:backgContainer.clientHeight });

@@ -6,24 +6,19 @@ export const loadState = () => {
     if (serializedData === null){
       return undefined // Si no existe el state en el local storage devolvemos undefined para que cargue el state inicial que hayamos definido
     }
-    return fromJS(JSON.parse(serializedData)) // Si encontramos con exito nuestro storage lo devolvemos.
+    //console.log(JSON.parse(serializedData));
+    return JSON.parse(serializedData);
+    //return fromJS(JSON.parse(serializedData)) // Si encontramos con exito nuestro storage lo devolvemos.
   } catch (error) {
     return undefined // Si ocurre algun error, devuelvo undefined para cargar el state inicial.
   }
 }
+
 export const saveState = (state) => {
   try {
 
-    if(state.navigation.currentPagekey)
-    {
-      let storeState = {
-        appState: state.appState,
-        navigationIndex: state.navigation.currentPagekey
-      }
-
-      let serializedData = JSON.stringify(fromJS(storeState).toJS())
-      localStorage.setItem('state', serializedData)
-    }
+    let serializedData = JSON.stringify(fromJS(state).toJS())
+    localStorage.setItem('state', serializedData)
 
 
     //console.log(localStorage.getItem('state'));
