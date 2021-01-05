@@ -7,7 +7,7 @@
   "main": "index.js",
   "homepage": "./",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "chart.js": "^2.8.0",
     "cordova-android": "^7.1.4",
     "cordova-browser": "^6.0.0",
